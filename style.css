@@ -15,6 +15,9 @@ video::-webkit-media-controls-enclosure {
   width: fit-content;
   background-color: rgba(255, 0, 0, 0.274);
 }
+p {
+  margin: 0;
+}
 .player-custom {
   position: absolute;
   bottom: 0;

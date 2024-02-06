@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
   const videoPlayer = document.getElementById("video");
+
   const currentPosition = document.getElementById("currentPosition");
   const targetPosition = document.getElementById("targetPosition");
-  const bufferSize = document.getElementById("bufferSize");
+
   const playPauseButton = document.getElementById("playPauseButton");
   const fullscreenButton = document.getElementById("fullscreenButton");
   const seekBar = document.getElementById("seekBar");
@@ -19,6 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const veryHightResolution = document.getElementById("veryHightResolution");
 
   const videoStats = document.querySelector(".video-stats");
+  const bufferSize = document.getElementById("bufferSize");
+  const sizeStart = document.querySelector(".size-start");
+  const sizeEnd = document.querySelector(".size-end");
+  const level = document.querySelector(".level");
 
   const videoSrc = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
@@ -56,11 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         beforeUnload();
         const resolutionIndex = qualityLevels.indexOf(value);
-        hls.destroy();
-        hls = new Hls();
-        const newSourceUrl = data.levels[resolutionIndex].url;
-        hls.loadSource(newSourceUrl[0]);
-        hls.attachMedia(videoPlayer);
+        hls.currentLevel = resolutionIndex;
         videoPlayer.play();
       }
       const resolutions = [
@@ -76,6 +77,14 @@ document.addEventListener("DOMContentLoaded", function () {
           switchResolution(resolution.value),
         );
       });
+    });
+
+    hls.on(Hls.Events.BUFFER_APPENDED, function (event, data) {
+      if ((data.type = "video")) {
+        sizeStart.textContent = "start:" + data.chunkMeta.buffering.video.start;
+        sizeEnd.textContent = "end:" + data.chunkMeta.buffering.video.end;
+        level.textContent = "level:" + data.chunkMeta.level;
+      }
     });
 
     window.addEventListener("beforeunload", beforeUnload);
@@ -125,9 +134,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateBufferSize() {
-    const loadedPercentage =
-      (videoPlayer.buffered.end(0) / videoPlayer.duration) * 100;
-    bufferSize.textContent = `${loadedPercentage.toFixed(2)}%`;
+    if (videoPlayer.buffered.length > 0) {
+      const loadedPercentage =
+        (videoPlayer.buffered.end(0) / videoPlayer.duration) * 100;
+      bufferSize.textContent = `${loadedPercentage.toFixed(2)}%`;
+    }
   }
 
   function speedUpdate() {
