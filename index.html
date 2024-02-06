@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>player</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+  </head>
+  <body>
+    <div class="video-container">
+      <video id="video" width="500px" preload="metadata" controls></video>
+
+      <div class="player-custom">
+        <div class="player-status" style="width: 100%">
+          <div>
+            <div style="display: flex; justify-content: space-between">
+              <span id="currentPosition">0:00</span>
+              <span id="targetPosition">0:00</span>
+            </div>
+            <input type="range" id="seekBar" max="100" style="width: 100%" />
+          </div>
+        </div>
+
+        <div
+          class="custom-controls"
+          style="
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div>
+            <button id="veryLowResolution">184</button>
+            <button id="lowResolution">288</button>
+            <button id="mediumResolution">480</button>
+            <button id="hightResolution">720</button>
+            <button id="veryHightResolution">1080</button>
+          </div>
+          <button id="playPauseButton">play</button>
+          <button id="fullscreenButton">fullscreen</button>
+          <div style="display: flex">
+            <div>
+              <p style="margin: 0">speed rate:<span id="speedRate"></span></p>
+              <input type="range" id="speed" value="1" min="1" max="5" />
+            </div>
+            <div>
+              <p style="margin: 0">volume:<span id="volumeRate"></span></p>
+              <input type="range" id="volume" value="50" max="100" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div>
+        <p>bufferSize <span id="bufferSize">0%</span></p>
+      </div>
+      <div class="video-stats"></div>
+    </div>
+  </body>
+  <script src="script.js"></script>
+</html>
